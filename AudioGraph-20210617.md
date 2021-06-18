@@ -161,7 +161,7 @@ int main()
 0. 初始化。
 1. 创建一个 `AudioGraph` 对象 `graph`。
 2. 创建一个 `AudioDeviceOutputNode` 对象 `output`，用于将音频信号输出到音频设备。
-3. 创建一个 `AudioFrameInputNode` 对象 `FrameInput`，用于从内存中的音频缓冲区读取音频信号。
+3. 创建一个 `AudioFrameInputNode` 对象 `frameInput`，用于从内存中的音频缓冲区读取音频信号。
 4. 将 `frameInput` 与 `output` 相连。
 5. 为 `frameInput` 添加量子开始事件。
 6. 启动 `graph`后，紧接着启动 `frameInput`，工作 2s 后，停止 `frameInput`，紧接着停止 `graph`。
@@ -284,7 +284,7 @@ void frameInputQuantumStarted(const AudioFrameInputNode& sender, const FrameInpu
 ```
 #### 说明
 这个示例中多了不少东西，这里说明一下：
-- COM 类 `IMemoryBufferByteAccess` 用于将缓冲区等转换为指向内存指针。继承的类为 `IUnknown`。注意 `IUnknown` 为 `Unknwn.h` 中的类，而不是 `winrt::Windows::Foundation` 中的类。
+- COM 类 `IMemoryBufferByteAccess` 用于将缓冲区等转换为指向内存指针。继承的类为 `IUnknown`。注意此处的 `IUnknown` 为 `Unknwn.h` 中的类，而不是 `winrt::Windows::Foundation` 中的类。
 - 由于 COM 的出现，**一定要正确安排代码的次序**。必须先包含 `Unknwn.h` ，然后再包含 WinRT 头文件；必须先写 `IMemoryBufferByteAccess` 的定义，然后再使用 WinRT 的命名空间。做错任何一个都会出现 `IUnknown` 类重定义（或者 `IUnknown` 不明确）的编译错误。
 - 在缓冲区中，多个声道的采样使用交错（interleaving）的方式存储（例：`LRLRLRLR`），使用这种存储方式方便回放。另一种存储方式是非交错（deinterleaving）（例：`LLLLRRRR`），使用这种存储方式方便进行信号处理（如傅里叶变换）。
 - 缓冲区存放的数据类型为 32 位单精度浮点（`float`），不是 32 位有符号整型（`std::int32_t`）。
@@ -312,7 +312,6 @@ void frameInputQuantumStarted(const AudioFrameInputNode& sender, const FrameInpu
     // C++/WinRT
     void frameInputQuantumStarted(const AudioFrameInputNode&, const FrameInputNodeQuantumStartedEventArgs&);
     frameInputNode.QuantumStarted(frameInputQuantumStarted);
-    );
     ```
 - 要参见更多事项，参见微软文档 
 <a href="https://docs.microsoft.com/zh-cn/windows/uwp/cpp-and-winrt-apis/move-to-winrt-from-csharp">从 C# 移动到 C++/WinRT</a>。
