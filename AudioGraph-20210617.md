@@ -285,7 +285,8 @@ void frameInputQuantumStarted(const AudioFrameInputNode& sender, const FrameInpu
 #### 说明
 这个示例中多了不少东西，这里说明一下：
 - COM 类 `IMemoryBufferByteAccess` 用于将缓冲区等转换为指向内存指针。继承的类为 `IUnknown`。注意此处的 `IUnknown` 为 `Unknwn.h` 中的类，而不是 `winrt::Windows::Foundation` 中的类。
-- 由于 COM 的出现，**一定要正确安排代码的次序**。必须先包含 `Unknwn.h` ，然后再包含 WinRT 头文件；必须先写 `IMemoryBufferByteAccess` 的定义，然后再使用 WinRT 的命名空间。做错任何一个都会出现 `IUnknown` 类重定义（或者 `IUnknown` 不明确）的编译错误。
+- 由于 COM 的出现，**一定要正确安排代码的次序**。必须先包含 `Unknwn.h` ，然后再包含 WinRT 头文件；必须先写 `IMemoryBufferByteAccess` 的定义，然后再使用 WinRT 的命名空间。做错任何一个都会出现 `IUnknown` 类重定义（或者 `IUnknown` 不明确）的编译错误。  
+    来源：[FFWD to 2019 · Issue #1 · lilpolywog/audiograph](https://github.com/lilpolywog/audiograph/issues/1)
 - 在缓冲区中，多个声道的采样使用交错（interleaving）的方式存储（例：`LRLRLRLR`），使用这种存储方式方便回放。另一种存储方式是非交错（deinterleaving）（例：`LLLLRRRR`），使用这种存储方式方便进行信号处理（如傅里叶变换）。
 - 缓冲区存放的数据类型为 32 位单精度浮点（`float`），不是 32 位有符号整型（`std::int32_t`）。
 
